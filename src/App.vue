@@ -5,11 +5,15 @@
     <button class="newGame">New game</button>
   </div>
   <header>
-    <div class="player1 move"><p>Player 1 move</p></div>
-    <div class="player2 move inactive"><p>Player 2 move</p></div>
+    <div class="player1 move" :class="{ inactive: player2Move }">
+      <p>Player 1 move</p>
+    </div>
+    <div class="player2 move" :class="{ inactive: player1Move }">
+      <p>Player 2 move</p>
+    </div>
   </header>
   <main>
-    <div class="field" data-key="1"></div>
+    <div class="field" data-key="1" @click="changePlayer"></div>
     <div class="field" data-key="2"></div>
     <div class="field" data-key="3"></div>
     <div class="field" data-key="4"></div>
@@ -23,7 +27,27 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      player1Choices: [],
+      player2Choices: [],
+      player1Move: true,
+      player2Move: false,
+    };
+  },
+  methods: {
+    changePlayer() {
+      if (this.player1Move) {
+        this.player1Move = false;
+        this.player2Move = true;
+      } else {
+        this.player1Move = true;
+        this.player2Move = false;
+      }
+    },
+  },
+};
 </script>
 
 <style>
