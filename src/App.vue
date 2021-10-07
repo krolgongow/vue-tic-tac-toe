@@ -13,7 +13,9 @@
     </div>
   </header>
   <main>
-    <div class="field" data-key="1" @click="changePlayer"></div>
+    <div class="field" data-key="1" @click="changePlayer">
+      <choosen-field :image="player1Move ? 'circle' : 'cross'"></choosen-field>
+    </div>
     <div class="field" data-key="2"></div>
     <div class="field" data-key="3"></div>
     <div class="field" data-key="4"></div>
@@ -27,7 +29,9 @@
 </template>
 
 <script>
+import ChoosenField from "./components/ChoosenField.vue";
 export default {
+  components: { ChoosenField },
   data() {
     return {
       player1Choices: [],

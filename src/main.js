@@ -1,4 +1,8 @@
-import { createApp } from 'vue'
-import App from './App.vue'
+import { createApp } from "vue";
+import App from "./App.vue";
+import ChoosenField from "./components/ChoosenField.vue";
 
-createApp(App).mount('#app')
+const app = createApp(App);
+app.component("choosen-field", ChoosenField);
+
+app.mount("#app");
