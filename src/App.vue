@@ -1,8 +1,8 @@
 <template>
-  <div class="cover off"></div>
-  <div class="result off">
-    <div class="winner">player1 won!</div>
-    <button class="newGame">New game</button>
+  <div class="cover" :class="winner"></div>
+  <div class="result" :class="winner">
+    <div class="winner">{{ winner }}</div>
+    <button class="newGame" @click="reset">New game</button>
   </div>
   <header>
     <div class="player1 move" :class="{ inactive: player2Move }">
@@ -14,18 +14,70 @@
   </header>
   <main>
     <div class="field" data-key="1" @click="changePlayer">
-      <choosen-field :image="player1Move ? 'circle' : 'cross'"></choosen-field>
+      <choosen-field
+        v-if="player1Choices.includes('1') || player2Choices.includes('1')"
+        :image="checkingChoices('1')"
+        @click.stop
+      ></choosen-field>
     </div>
-    <div class="field" data-key="2"></div>
-    <div class="field" data-key="3"></div>
-    <div class="field" data-key="4"></div>
-    <div class="field" data-key="5"></div>
-    <div class="field" data-key="6"></div>
-    <div class="field" data-key="7"></div>
-    <div class="field" data-key="8"></div>
-    <div class="field" data-key="9"></div>
+    <div class="field" data-key="2" @click="changePlayer">
+      <choosen-field
+        v-if="player1Choices.includes('2') || player2Choices.includes('2')"
+        :image="checkingChoices('2')"
+        @click.stop
+      ></choosen-field>
+    </div>
+    <div class="field" data-key="3" @click="changePlayer">
+      <choosen-field
+        v-if="player1Choices.includes('3') || player2Choices.includes('3')"
+        :image="checkingChoices('3')"
+        @click.stop
+      ></choosen-field>
+    </div>
+    <div class="field" data-key="4" @click="changePlayer">
+      <choosen-field
+        v-if="player1Choices.includes('4') || player2Choices.includes('4')"
+        :image="checkingChoices('4')"
+        @click.stop
+      ></choosen-field>
+    </div>
+    <div class="field" data-key="5" @click="changePlayer">
+      <choosen-field
+        v-if="player1Choices.includes('5') || player2Choices.includes('5')"
+        :image="checkingChoices('5')"
+        @click.stop
+      ></choosen-field>
+    </div>
+    <div class="field" data-key="6" @click="changePlayer">
+      <choosen-field
+        v-if="player1Choices.includes('6') || player2Choices.includes('6')"
+        :image="checkingChoices('6')"
+        @click.stop
+      ></choosen-field>
+    </div>
+    <div class="field" data-key="7" @click="changePlayer">
+      <choosen-field
+        v-if="player1Choices.includes('7') || player2Choices.includes('7')"
+        :image="checkingChoices('7')"
+        @click.stop
+      ></choosen-field>
+    </div>
+    <div class="field" data-key="8" @click="changePlayer">
+      <choosen-field
+        v-if="player1Choices.includes('8') || player2Choices.includes('8')"
+        :image="checkingChoices('8')"
+        @click.stop
+      ></choosen-field>
+    </div>
+    <div class="field" data-key="9" @click="changePlayer">
+      <choosen-field
+        v-if="player1Choices.includes('9') || player2Choices.includes('9')"
+        :image="checkingChoices('9')"
+        @click.stop
+      ></choosen-field>
+    </div>
   </main>
-  <button class="reset">reset</button>
+  <button class="reset" @click="reset">reset</button>
 </template>
 
 <script>
@@ -38,17 +90,56 @@ export default {
       player2Choices: [],
       player1Move: true,
       player2Move: false,
+      winner: "off",
     };
   },
   methods: {
-    changePlayer() {
+    changePlayer(e) {
       if (this.player1Move) {
+        this.player1Choices.push(e.target.dataset.key);
+        this.checkingResult(this.player1Choices);
         this.player1Move = false;
         this.player2Move = true;
       } else {
+        this.player2Choices.push(e.target.dataset.key);
+        this.checkingResult(this.player2Choices);
         this.player1Move = true;
         this.player2Move = false;
       }
+    },
+    checkingChoices(num) {
+      if (this.player1Choices.includes(num)) {
+        return "circle";
+      } else if (this.player2Choices.includes(num)) {
+        return "cross";
+      }
+    },
+    checkingResult(arr) {
+      if (
+        (arr.includes("1") && arr.includes("2") && arr.includes("3")) ||
+        (arr.includes("1") && arr.includes("4") && arr.includes("7")) ||
+        (arr.includes("1") && arr.includes("5") && arr.includes("9")) ||
+        (arr.includes("2") && arr.includes("5") && arr.includes("8")) ||
+        (arr.includes("3") && arr.includes("6") && arr.includes("9")) ||
+        (arr.includes("3") && arr.includes("5") && arr.includes("7")) ||
+        (arr.includes("4") && arr.includes("5") && arr.includes("6")) ||
+        (arr.includes("7") && arr.includes("8") && arr.includes("9"))
+      ) {
+        if (arr === this.player1Choices) {
+          this.winner = "Player1 won!";
+        } else if (arr === this.player2Choices) {
+          this.winner = "Player2 won!";
+        }
+      } else {
+        this.winner = "off";
+      }
+    },
+    reset() {
+      this.player1Choices = [];
+      this.player2Choices = [];
+      this.player1Move = true;
+      this.player2Move = false;
+      this.winner = "off";
     },
   },
 };
@@ -175,9 +266,9 @@ main {
 }
 .result {
   position: relative;
-  top: 50%;
+  top: 0;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%);
   height: 400px;
   width: 600px;
   border-radius: 25px;
